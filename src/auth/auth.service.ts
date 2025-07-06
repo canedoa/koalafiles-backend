@@ -22,7 +22,10 @@ export class AuthService {
     }
 
     // Hashear la contraseña
-    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const hashedPassword = await bcrypt.hash(
+      dto.password,
+      await bcrypt.genSalt(Number(process.env.SALT_ROUND)),
+    );
 
     // Crear nuevo usuario
     const newUser = this.userRepository.create({

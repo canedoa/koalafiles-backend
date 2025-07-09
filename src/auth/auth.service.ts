@@ -4,12 +4,14 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly storageService: StorageService,
   ) {}
 
   async register(dto: CreateUserDto) {
@@ -36,6 +38,9 @@ export class AuthService {
     // Guardar en la base de datos
     await this.userRepository.save(newUser);
 
+    // Aseguramos la carpeta fisica para este usuario
+    this.storageService.ensureUserFolder(newUser.id.toString());
+
     return { message: 'Usuario registrado exitosamente' };
   }
 
@@ -53,9 +58,10 @@ export class AuthService {
       throw new BadRequestException('Credenciales incorrectas');
     }
 
-    // Aquí podrías generar un JWT si quieres autenticación con token
+    this.storageService.ensureUserFolder(user.id.toString());
+
     return {
-      token: 'FAKE-TOKEN', // por ahora es un placeholder
+      token: 'FAKE-TOKEN',
       user: {
         id: user.id,
         name: user.firstName,

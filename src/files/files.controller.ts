@@ -13,18 +13,19 @@ import { StorageService }       from '../storage/storage.service';
 import { FileInterceptor }      from '@nestjs/platform-express';
 
 @Controller('files')
-@UseGuards(JwtAuthGuard)  // proteger todas las rutas de este controlador
+@UseGuards(JwtAuthGuard)
+  // proteger todas las rutas de este controlador
 export class FilesController {
   constructor(private readonly storage: StorageService) {}
 
-  //Listar contenido de storage/<userId> 
+  //Listar contenido de storage/<userId>
   @Get()
   list(@Req() req) {
     const userId = req.user.userId.toString();
     return this.storage.listUserFolder(userId);
   }
 
-  //Subir un archivo a storage/<userId>/ 
+  //Subir un archivo a storage/<userId>/
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   upload(@Req() req, @UploadedFile() file: Express.Multer.File) {
@@ -32,7 +33,7 @@ export class FilesController {
     return this.storage.saveFile(userId, file);
   }
 
-  //Crear subcarpeta dentro de storage/<userId>/ 
+  //Crear subcarpeta dentro de storage/<userId>/
   @Post('mkdir')
   mkdir(@Req() req, @Body('name') name: string) {
     const userId = req.user.userId.toString();

@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -8,13 +6,12 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-
       // Le decimos a passport-jwt como extraer el token de la petición:
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       // El mismo secreto que usamos al firmar los tokens:
       secretOrKey: process.env.JWT_SECRET || 'CHANGE_ME',
     });
-    console.log('JwtStrategy initialized, secret=' + (process.env.JWT_SECRET || 'CHANGE_ME'));
+    console.log('[DEBUG] JwtStrategy initialized, JWT_SECRET =', process.env.JWT_SECRET || 'CHANGE_ME');
   }
 
   /*

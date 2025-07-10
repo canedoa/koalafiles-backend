@@ -5,11 +5,13 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
-    AuthModule,
-    ConfigModule.forRoot({ isGlobal: true }), //cargar variables de entorno desde el archivo .env
+    FilesModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule, //cargar variables de entorno desde el archivo .env
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,

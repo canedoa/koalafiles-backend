@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { StorageService } from '../storage/storage.service';
-
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +13,7 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly storageService: StorageService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(dto: CreateUserDto) {
@@ -60,9 +61,14 @@ export class AuthService {
     }
 
     this.storageService.ensureUserFolder(user.id.toString());
+    // ——————————————————————————————————————————
+    // Aquí firmamos un JWT real usando JwtService
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+    // ——————————————————————————————————————————
 
     return {
-      token: 'FAKE-TOKEN',
+      token,
       user: {
         id: user.id,
         name: user.firstName,

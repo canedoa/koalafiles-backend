@@ -7,6 +7,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard }         from '../auth/jwt-auth.guard';
 import { StorageService }       from '../storage/storage.service';
@@ -18,11 +19,12 @@ import { FileInterceptor }      from '@nestjs/platform-express';
 export class FilesController {
   constructor(private readonly storage: StorageService) {}
 
-  //Listar contenido de storage/<userId>
+  //Listar contenido de storage/<userId> o subcarpetas
   @Get()
-  list(@Req() req) {
+  list(@Req() req, @Query('path') path?: string) {
     const userId = req.user.userId.toString();
-    return this.storage.listUserFolder(userId);
+    // Si hay path, lo pasamos al storage service
+    return this.storage.listUserFolder(userId, path);
   }
 
   //Subir un archivo a storage/<userId>/

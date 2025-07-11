@@ -1,5 +1,3 @@
-
-
 import { Injectable, Logger } from '@nestjs/common';
 import * as fs   from 'fs';
 import * as path from 'path';
@@ -22,14 +20,18 @@ export class StorageService {
     }
   }
 
-  /** Lista archivos y subcarpetas en storage/<userId> */
-  listUserFolder(userId: string): string[] {
-    const folder = path.join(this.basePath, userId);
+  /** Lista archivos y subcarpetas en storage/<userId>/<path> */
+  listUserFolder(userId: string, relPath: string = ''): { nombre: string; tipo: 'archivo' | 'carpeta' }[] {
+    const folder = path.join(this.basePath, userId, relPath);
     if (!fs.existsSync(folder)) {
-      this.logger.warn(`Folder no existe para usuario ${userId}`);
+      this.logger.warn(`Folder no existe para usuario ${userId} en ruta ${relPath}`);
       return [];
     }
-    return fs.readdirSync(folder);
+    return fs.readdirSync(folder).map((nombre) => {
+      const fullPath = path.join(folder, nombre);
+      const tipo = fs.statSync(fullPath).isDirectory() ? 'carpeta' : 'archivo';
+      return { nombre, tipo };
+    });
   }
 
   /** Guarda un archivo en storage/<userId>/<originalname> */

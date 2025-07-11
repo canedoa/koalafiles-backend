@@ -11,8 +11,14 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  me(@Req() req: any) {
-    return req.user;
+  async me(@Req() req: any) {
+    // Busca el usuario en la base de datos y devuelve el nombre
+    const user = await this.authService.findById(req.user.userId);
+    return {
+      userId: user.id,
+      email: user.email,
+      name: user.firstName, // o el campo que prefieras
+    };
   }
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {

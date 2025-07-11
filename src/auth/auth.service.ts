@@ -76,4 +76,12 @@ export class AuthService {
       },
     };
   }
+
+  async findById(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+    return user;
+  }
 }

@@ -11,7 +11,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // El mismo secreto que usamos al firmar los tokens:
       secretOrKey: process.env.JWT_SECRET || 'CHANGE_ME',
     });
-    console.log('[DEBUG] JwtStrategy initialized, JWT_SECRET =', process.env.JWT_SECRET || 'CHANGE_ME');
+    console.log(
+      '[DEBUG] JwtStrategy initialized, JWT_SECRET =',
+      process.env.JWT_SECRET || 'CHANGE_ME',
+    );
   }
 
   /*
@@ -19,12 +22,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    @param payload = el objeto que firmamos en AuthService (e.g. { sub: userId, email })
    @returns lo que queremos exponer luego como req.user
    */
-  
+
   async validate(payload: any) {
     console.log('JWT payload recibido:', payload);
     return {
       userId: payload.sub,
-      email:  payload.email,
+      email: payload.email,
     };
   }
 }

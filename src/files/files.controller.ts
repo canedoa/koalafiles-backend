@@ -9,13 +9,13 @@ import {
   UploadedFile,
   Query,
 } from '@nestjs/common';
-import { JwtAuthGuard }         from '../auth/jwt-auth.guard';
-import { StorageService }       from '../storage/storage.service';
-import { FileInterceptor }      from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { StorageService } from '../storage/storage.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('files')
 @UseGuards(JwtAuthGuard)
-  // proteger todas las rutas de este controlador
+// proteger todas las rutas de este controlador
 export class FilesController {
   constructor(private readonly storage: StorageService) {}
 
@@ -27,18 +27,22 @@ export class FilesController {
     return this.storage.listUserFolder(userId, path);
   }
 
-  //Subir un archivo a storage/<userId>/
+  //Subir un archivo a storage/<userId>/<path>/
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  upload(@Req() req, @UploadedFile() file: Express.Multer.File) {
+  upload(
+    @Req() req,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('path') path?: string,
+  ) {
     const userId = req.user.userId.toString();
-    return this.storage.saveFile(userId, file);
+    return this.storage.saveFile(userId, file, path);
   }
 
-  //Crear subcarpeta dentro de storage/<userId>/
+  //Crear subcarpeta dentro de storage/<userId>/<path>/
   @Post('mkdir')
-  mkdir(@Req() req, @Body('name') name: string) {
+  mkdir(@Req() req, @Body('name') name: string, @Body('path') path?: string) {
     const userId = req.user.userId.toString();
-    return this.storage.createSubfolder(userId, name);
+    return this.storage.createSubfolder(userId, name, path);
   }
 }

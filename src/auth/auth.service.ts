@@ -73,6 +73,7 @@ export class AuthService {
         id: user.id,
         name: user.firstName,
         email: user.email,
+        idPerfil: user.idPerfil,
       },
     };
   }

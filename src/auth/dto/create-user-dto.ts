@@ -23,9 +23,9 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  plan: string;
+  plan?: string;
 
   @IsNotEmpty()
   @IsBoolean()
-  accepted_terms: boolean;
+  accepted_terms?: boolean;
 }

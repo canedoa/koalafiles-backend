@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
-import { AppController } from './app.controller';
+import { ProfilesController } from './app.controller';
+import { ProfilesModule } from './profiles/profiles.module';
+import { UsersModule } from './users/users.module';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
@@ -10,8 +12,10 @@ import { FilesModule } from './files/files.module';
 @Module({
   imports: [
     FilesModule,
+    ProfilesModule,
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule, //cargar variables de entorno desde el archivo .env
+    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -23,7 +27,7 @@ import { FilesModule } from './files/files.module';
       synchronize: true, // usar solo en desarrollo
     }),
   ],
-  controllers: [AppController],
+  controllers: [ProfilesController],
   providers: [AppService],
 })
 export class AppModule {}

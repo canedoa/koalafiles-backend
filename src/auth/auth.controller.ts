@@ -17,7 +17,8 @@ export class AuthController {
     return {
       userId: user.id,
       email: user.email,
-      name: user.firstName, // o el campo que prefieras
+      name: user.firstName, 
+      idPerfil: user.idPerfil,
     };
   }
   @Post('register')

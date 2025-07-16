@@ -1,13 +1,51 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import cloudinary from '../cloudinary.config';
+import { UploadApiResponse } from 'cloudinary';
 
 @Injectable()
 export class StorageService {
   private readonly logger = new Logger(StorageService.name);
   private readonly basePath = path.join(process.cwd(), 'storage');
 
+  /** Sube un archivo a Cloudinary en la carpeta del usuario (no afecta el original) */
+  async saveFileCloudinary(
+    userId: string,
+    file: Express.Multer.File,
+    relPath: string = '',
+  ): Promise<UploadApiResponse> {
+    const folder = `${userId}/${relPath}`;
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ folder }, (error, result) => {
+          if (error || !result) {
+            this.logger.error(`[Cloudinary] Error subiendo archivo: ${error}`);
+            return reject(
+              error || new Error('No se recibió respuesta de Cloudinary'),
+            );
+          }
+          this.logger.log(
+            `[Cloudinary] Archivo subido para usuario ${userId} en ${relPath}: ${file.originalname}`,
+          );
+          resolve(result);
+        })
+        .end(file.buffer);
+    });
+  }
 
+  /** Crea una carpeta virtual en Cloudinary (no afecta el original) */
+  async createSubfolderCloudinary(
+    userId: string,
+    name: string,
+    relPath: string = '',
+  ) {
+    const folder = `${userId}/${relPath}/${name}`;
+    this.logger.log(
+      `[Cloudinary] Carpeta virtual creada para usuario ${userId}: ${folder}`,
+    );
+    return { success: true, folder };
+  }
 
   /** Crea la carpeta base y la especifica del usuario si no existen */
   ensureUserFolder(userId: string): void {

@@ -14,4 +14,3 @@ export class Permission {
   @Column({ name: 'SubirArchivo', type: 'tinyint', width: 1 })
   SubirArchivo: number;
 }
-

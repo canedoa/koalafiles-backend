@@ -1,5 +1,14 @@
 // ...existing code...
-import { Controller, Get, Post, Put, Delete, Param, Body, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  Patch,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PermissionsService } from '../permissions/permissions.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,9 +34,12 @@ export class UsersController {
   @Patch(':id/permissions')
   async updateUserPermissions(
     @Param('id') id: number,
-    @Body() updatePermissionDto: { createFolder: boolean; uploadFile: boolean }
+    @Body() updatePermissionDto: { createFolder: boolean; uploadFile: boolean },
   ) {
-    return await this.permissionsService.update(Number(id), updatePermissionDto);
+    return await this.permissionsService.update(
+      Number(id),
+      updatePermissionDto,
+    );
   }
 
   @Get(':id')

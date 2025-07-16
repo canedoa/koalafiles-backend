@@ -25,6 +25,9 @@ import { FilesModule } from './files/files.module';
       database: process.env.DB_NAME,
       autoLoadEntities: true, // para no tener que declarar las entidades aquí
       synchronize: true, // usar solo en desarrollo
+      extra: {
+        connectionLimit: 2,
+      },
     }),
   ],
   controllers: [ProfilesController],

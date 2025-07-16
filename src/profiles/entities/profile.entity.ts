@@ -8,13 +8,13 @@ import {
 } from 'typeorm';
 import { User } from '../../entities/user.entity';
 
-@Entity('profiles')
+@Entity('profile')
 export class Profile {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn({ name: 'idPerfil' })
+  idPerfil: number;
 
-  @Column()
-  nombre: string;
+  @Column({ name: 'perfil' })
+  perfil: string;
 
   @OneToMany(() => User, (user) => user.perfil)
   usuarios: User[];

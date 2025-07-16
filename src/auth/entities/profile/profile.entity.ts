@@ -7,7 +7,7 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
-import { Permission } from '../permission/permission.entity';
+// import { Permission } from '../permission/permission.entity';
 import { User } from '../../../entities/user.entity';
 
 @Entity('profile')
@@ -21,11 +21,5 @@ export class Profile {
   @OneToMany(() => User, (user) => user.perfil)
   usuarios: User[];
 
-  @ManyToMany(() => Permission, (perm) => perm.profiles, { cascade: true })
-  @JoinTable({
-    name: 'profiles_permissions',
-    joinColumn: { name: 'profile_id', referencedColumnName: 'idPerfil' },
-    inverseJoinColumn: { name: 'permission_id', referencedColumnName: 'id' },
-  })
-  permissions: Permission[];
+  // Eliminada relación ManyToMany con Permission para evitar tabla innecesaria
 }

@@ -1,29 +1,17 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-} from 'typeorm';
-import { Profile } from '../profile/profile.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('permission')
 export class Permission {
   @PrimaryGeneratedColumn({ name: 'idpermisos' })
-  id: number;
+  idpermisos: number;
 
-  @Column({ name: 'cnombre' })
-  name: string;
+  @Column({ name: 'idUsuario' })
+  idUsuario: number;
 
-  @Column({ name: 'cmetodo' })
-  method: string;
+  @Column({ name: 'CrearCarpeta', type: 'tinyint', width: 1 })
+  CrearCarpeta: number;
 
-  @Column({ name: 'cicono', nullable: true })
-  icon: string;
-
-  @Column({ name: 'iActivo', type: 'tinyint', default: 1 })
-  isActive: boolean;
-
-  @ManyToMany(() => Profile, (profile) => profile.permissions)
-  profiles: Profile[];
+  @Column({ name: 'SubirArchivo', type: 'tinyint', width: 1 })
+  SubirArchivo: number;
 }
 

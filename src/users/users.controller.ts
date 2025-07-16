@@ -1,16 +1,33 @@
+// ...existing code...
 import { Controller, Get, Post, Put, Delete, Param, Body, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
-// Patch
+import { PermissionsService } from '../permissions/permissions.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly permissionsService: PermissionsService,
+  ) {}
 
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get(':id/permissions')
+  async getUserPermissions(@Param('id') id: number) {
+    return await this.permissionsService.findOne(Number(id));
+  }
+
+  @Patch(':id/permissions')
+  async updateUserPermissions(
+    @Param('id') id: number,
+    @Body() updatePermissionDto: { createFolder: boolean; uploadFile: boolean }
+  ) {
+    return await this.permissionsService.update(Number(id), updatePermissionDto);
   }
 
   @Get(':id')

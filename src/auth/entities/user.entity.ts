@@ -1,1 +1,0 @@
-// Eliminado: definición duplicada de User. Usar solo la de src/entities/user.entity.ts

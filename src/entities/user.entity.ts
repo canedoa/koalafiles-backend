@@ -1,16 +1,7 @@
-// src/auth/entities/user.entity.ts
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-} from 'typeorm';
-import { Profile } from '../profiles/entities/profile.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Profile } from '../auth/entities/profile/profile.entity';
 
-// Ajusta la ruta si es diferente
-
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -36,9 +27,13 @@ export class User {
   @Column({ default: true })
   accepted_terms: boolean;
 
-  @CreateDateColumn()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
+  @Column({ default: 2 })
+  idPerfil: number;
+
   @ManyToOne(() => Profile, (profile) => profile.usuarios)
+  @JoinColumn({ name: 'idPerfil' })
   perfil: Profile;
 }

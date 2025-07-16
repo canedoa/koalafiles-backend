@@ -1,9 +1,10 @@
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user-dto';
+import { LoginDto } from './dto/login-dto';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User } from '../entities/user.entity';
 import { StorageService } from '../storage/storage.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -26,9 +27,10 @@ export class AuthService {
     }
 
     // Hashear la contraseña
+    const saltRounds = Number(process.env.SALT_ROUND) || 10;
     const hashedPassword = await bcrypt.hash(
       dto.password,
-      await bcrypt.genSalt(Number(process.env.SALT_ROUND)),
+      await bcrypt.genSalt(saltRounds),
     );
 
     // Crear nuevo usuario
@@ -46,7 +48,7 @@ export class AuthService {
     return { message: 'Usuario registrado exitosamente' };
   }
 
-  async login(dto: CreateUserDto) {
+  async login(dto: LoginDto) {
     const user = await this.userRepository.findOne({
       where: { email: dto.email },
     });
@@ -73,7 +75,7 @@ export class AuthService {
         id: user.id,
         name: user.firstName,
         email: user.email,
-        idPerfil: user.idPerfil,
+        idPerfil: user.perfil?.idPerfil,
       },
     };
   }

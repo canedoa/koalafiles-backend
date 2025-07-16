@@ -1,13 +1,14 @@
-import { IsEmail, IsNotEmpty, IsBoolean, IsString, MinLength } from 'class-validator';
+
+import { IsEmail, IsNotEmpty, IsBoolean, IsString, MinLength, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
-  first_name: string;
+  firstName: string;
 
   @IsNotEmpty()
   @IsString()
-  last_name: string;
+  lastName: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -28,4 +29,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsBoolean()
   accepted_terms?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  idPerfil?: number;
 }

@@ -3,6 +3,7 @@ import { ProfilesService } from './profiles/profiles.service';
 import { CreateUserDto } from './auth/dto/create-user-dto';
 import { UpdateProfileDto } from './profiles/dto/update-profile.dto';
 
+
 @Controller('profiles')
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
@@ -33,4 +34,6 @@ export class ProfilesController {
   createUser(@Body() dto: CreateUserDto) {
     return this.profilesService.createUser(dto);
   }
+
+  
 }

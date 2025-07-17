@@ -8,7 +8,8 @@ async function bootstrap() {
     origin: ['https://codewithsoul.com', 'http://localhost:4200'],
 
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+
   });
   await app.listen(process.env.PORT ?? 3000);
 }
